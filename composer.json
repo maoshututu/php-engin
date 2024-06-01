@@ -1,0 +1,26 @@
+{
+    "name": "maoshu/engine",
+    "description": "maoshu's php services engine",
+    "type": "library",
+    "require": {
+        "guzzlehttp/guzzle": "^7.8"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.1"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Maoshu\\Engine\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "maoshu",
+            "email": "feaglenet@qq.com"
+        }
+    ],
+    "scripts": {
+        "test": "phpunit src/tests"
+    }
+}
