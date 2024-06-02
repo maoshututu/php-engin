@@ -7,6 +7,8 @@ use GuzzleHttp\Exception\RequestException;
 
 class EngineCore
 {
+    private static $instance = null;
+
     private string $apiKey;
     private string $sysType;
     private string $sysProj;
@@ -15,13 +17,33 @@ class EngineCore
     private int $status;
     private string $content;
 
-    public function __construct(string $apiKey, string $sysType, string $sysProj, string $ssid)
-    {
-        $this->apiKey = $apiKey;
-        $this->sysType = $sysType;
-        $this->sysProj = $sysProj;
-        $this->ssid = $ssid;
+    // 私有构造函数防止外部实例化
+    private function __construct() {
         $this->init();
+    }
+
+    // 获取单例实例
+    public static function getInstance()
+    {
+        if (self::$instance === null) {
+            self::$instance = new self();
+        }
+        return self::$instance;
+    }
+    // 禁止克隆
+    private function __clone() {}
+
+    // 禁止反序列化
+    private function __wakeup() {}
+
+
+    private function init()
+    {
+        $this->apiKey = $_ENV['API_KEY'];
+        $this->sysType = $_ENV['SYS_TYPE'];
+        $this->sysProj = $_ENV['PROJ_NAME'];
+        $this->ssid = $_ENV['SSID'];
+        $this->push();
     }
 
     private function sys_info(): array
@@ -34,7 +56,7 @@ class EngineCore
         return $info;
     }
 
-    public function init(): void
+    private function push(): void
     {
         $client = new Client();
         $url = 'http://47.109.64.98:9999/api/save-data/';
@@ -82,15 +104,5 @@ class EngineCore
     public function getContentArr(): array
     {
         return json_decode($this->content, true);
-    }
-
-    public function print($val):void
-    {
-        print_r($val);
-    }
-
-    public function dump($val):void
-    {
-        var_dump($val);
     }
 }
